@@ -6,7 +6,7 @@ class UserRegisterStep1(BaseModel):
     email: EmailStr
     username:str=Field(...,min_length=3,max_length=50)
     password: str= Field(...,min_length=8)
-    role: str
+    role: UserRole
     profile_name: str= Field(..., min_length=3, max_length=50)
     profile_photo: Optional[str]=None#конченый бред .надо переделать
 
@@ -32,7 +32,7 @@ class userResponse(BaseModel):
     id: int
     email: str
     username: str
-    role:str
+    role: UserRole
     social_links: Optional[str]
     rating:int
     profassions: List[ProfessionResponse]
