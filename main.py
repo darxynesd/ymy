@@ -6,8 +6,7 @@ from schemas import (UserRegisterStep1, UserRegisterStep2,ProfessionCreate, Prof
 from sqlalchemy.orm import Session
 import json
 from models import User, UserRole, Master, Profession
-
-
+from auth import create_access_token, get_current_user
 app = FastAPI(title="YMY")
 
 Base.metadata.create_all(bind=engine)
@@ -129,8 +128,11 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     if not user or not user.verify_password(data.password):
         raise HTTPException(401, "Неверный логин или пароль")
     
+    token= create_access_token({"user_id": user.id})
+
     response = {
-        "message": f"Привет, {user.profile_name}!",
+        "access_token":token,
+        "token_type": "bearer",
         "user_id":user.id,
         "role" : user.role.value,
         "profile_name":user.profile_name
@@ -143,10 +145,10 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     return response
 
 @app.get("/users/{user_id}")
-def get_user_profile(user_id:int,db:Session =Depends(get_db)):
+def get_user_profile(user_id:int,db:Session =Depends(get_db), current_user: User= Depends(get_current_user)):
     user =db.query(User).filter(User.id==user_id).first()
-    if not user:
-        raise HTTPException(404, "Пользователь не найден")
+    if current_user.id != user_id:
+        raise HTTPException(403, "No access")
     
     result ={
         "id": user.id,
