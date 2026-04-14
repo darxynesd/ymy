@@ -1,0 +1,151 @@
+body {
+    background-color: #f5dbf1;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(255, 237, 246);
+    padding: 10px 20px;
+}
+
+#nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(175, 39, 123);
+}
+
+nav a {
+    text-decoration: none;
+    color: crimson;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: rgb(0, 0, 0);
+}
+
+#nav-right {
+    text-align: right;
+}
+
+#phone {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#banner {
+    background-color: rgb(255, 132, 204);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 0 0 50% 50% / 0 0 80px 80px;
+}
+
+#master-name {
+    font-size: 48px;
+    color: aliceblue;
+    margin: 0;
+}
+
+#master-profession {
+    font-size: 20px;
+    color: aliceblue;
+}
+
+#action-btn {
+    padding: 12px 40px;
+    border: none;
+    border-radius: 25px;
+    background-color: white;
+    color: crimson;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#action-btn:hover {
+    background-color: crimson;
+    color: white;
+}
+
+#main-content {
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#about {
+    flex: 1;
+}
+
+#works {
+    flex: 1;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.tag {
+    background-color: rgb(255, 132, 204);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: crimson;
+}
+
+#works-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.work-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 15px 20px;
+    width: 100%;
+}
+
+.work-info {
+    flex: 1;
+}
+
+.work-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+    background-color: rgb(255, 132, 204);
+    object-fit: cover;
+}
