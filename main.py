@@ -5,9 +5,17 @@ from fastapi import HTTPException
 from schemas import (UserRegisterStep1, UserRegisterStep2,ProfessionCreate, ProfessionResponse,LoginRequest, LoginResponse)
 from sqlalchemy.orm import Session
 import json
+from fastapi.middleware.cors import CORSMiddleware
 from models import User, UserRole, Master, Profession
 from auth import create_access_token, get_current_user
 app = FastAPI(title="YMY")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(bind=engine)
 

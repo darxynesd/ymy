@@ -1,0 +1,135 @@
+
+
+
+.signup-hero {
+    padding:60px 0 0;
+    overflow: hidden;
+}
+.signup-title {
+    font-family:"Odibee Sans", sans-serif;
+    font-size: clamp(6em,18vw,17em);
+    font-weight:400;
+    line-height:0.88;
+    color: #2E373A;
+    margin:0;
+    user-select: none;
+}
+
+.signup-wrapper {
+    margin: 60px auto 120px;
+    max-width:600px;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    animation: formAppear 0.4s ease both;
+}
+@keyframes formAppear {
+    from {opacity: 0; transform: translateY(24px);}
+    to   { opacity:1; transform: translateY(0);}
+}
+
+.form-label-big {
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 2.4em;
+    letter-spacing:0.04em;
+    color: #2E373A;
+    line-height: 1;
+    border-bottom: 1px solid #2E373A33;
+    padding-bottom: 20px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap:8px;
+}
+
+.field-group label {
+    font-size: 0.78em;
+    letter-spacing:0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+}
+
+.field-group input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid #2E373A66;
+    padding: 10px 0;
+    font-size: 1.15em;
+    font-family: "Libre Baskerville", sans-serif;
+    color: #2E373A;
+    outline:none;
+    transition:border-color 0.2s;
+    width: 100%;
+}
+.field-group input::placeholder {
+    opacity:0.3;
+    font-style:italic;
+
+}
+
+.field-group input:focus {
+    border-bottom-color: #2E373A;
+}
+
+
+.error-msg {
+    font-size: 0.85em;
+    color: #c0392b;
+    font-style:italic;
+    min-height:1.2em;
+}
+
+.submit-btn {
+    display:inline-flex;
+    align-items:center;
+    gap: 12px;
+    background:#272e35;
+    color: #CBCBCB;
+    border:none;
+    padding: 14px 32px;
+    font-family: "Odibee Sans",sans-serif;
+    font-size: 1.3em;
+    letter-spacing:  0.08em;
+    cursor:pointer;
+    border-radius:4px;
+    align-self: flex-start;
+    transition:background 0.3s, gap 0.3s;
+}
+.submit-btn:hover {
+    background:#4a5568;
+    gap:20px;
+}
+
+.success-screen {
+    flex-direction:column;
+    align-items:center;
+    gap:24px;
+    padding: 60px 0;
+    text-align: center;
+    animation:formAppear 0.4s ease both;
+}
+.success-icon {
+    font-size:4em;
+    font-family:"Odibee Sans",sans-serif;
+    animation:popIn 0.5s cubic-bezier(0.175,0.885, 0.32, 1.275) both;
+}
+@keyframes popIn {
+    from {transform:scale(0);opacity: 0;}
+    to { transform: scale(1); opacity:1;}
+}
+.success-text{
+    font-size: 1.2em;
+    opacity:0.6;
+    font-style:italic;
+}
+
+@media (max-width:767px) {
+    .signup-title {font-size:clamp(4em,22vw,7em);}
+    .signup-wrapper {margin:40px auto 80px;}
+    .submit-btn{width: 100%;  justify-content: center;}
+}
