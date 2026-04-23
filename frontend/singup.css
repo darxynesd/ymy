@@ -5,6 +5,7 @@
     padding:60px 0 0;
     overflow: hidden;
 }
+
 .signup-title {
     font-family:"Odibee Sans", sans-serif;
     font-size: clamp(6em,18vw,17em);
