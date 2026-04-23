@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YMY — Регистрация</title>
+    <link rel="stylesheet" href ="style.css">
+    <link rel= "stylesheet" href="singup.css">
+</head>
+<body>
+    <main>
+        <header>
+            <a href ="index.html"><img src="images/5.png" alt="YMY Logo"></a>
+            <div class ="auth-buttons">
+                <a href="login.html" class="my-button">Войти</a>
+            </div>
+        </header>
+
+        <section class ="signup-hero">
+            <h1 class="signup-title">JOIN<br>YMY</h1>
+        </section>
+
+        <section class="signup-wrapper">
+
+            <form id="registerForm" class="signup-form">
+                <div class="form-label-big"></div>
+
+                <div class= "field-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+
+
+                <div class="field-group">
+                    <label for ="username">Username</label>
+                    <input type="text" id="username" placeholder="минимум 3 символа" minlength="3" maxlength="50" required>
+                </div>
+                
+
+
+                <div class="field-group">
+                    <label for="profile_name">Имя профиля</label>
+                    <input type="text" id="profile_name" placeholder="Как вас зовут?" minlength="3" maxlength="50" required>
+                </div>
+
+
+                <div class= "field-group">
+                    <label for= "password">Пароль</label>
+                    <input type="password" id="password" placeholder="минимум 8 символов" minlength="8" required>
+                </div>
+
+
+                <div class="error-msg" id="errorMsg"></div>
+
+                <button type="button" class="submit-btn" id="submitBtn">
+                    <span>Зарегистрироваться</span>
+                    <span class="arrow">&#8594;</span>
+                </button>
+            </form>
+
+            <div id="successScreen"class="success-screen" style="display:none">
+                <div class="success-icon">✓</div>
+                <div class="form-label-big">Готово!</div>
+                <p class="success-text">Добро пожаловать в YMY</p>
+                <a href="login.html" class="submit-btn" style="text-decoration:none;">
+                    <span>Войти</span>
+                    <span class="arrow">&#8594;</span>
+                </a>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        const API_BASE ="http://localhost:8000";
+
+        document.getElementById("submitBtn").addEventListener("click", async () => {
+            const errEl = document.getElementById("errorMsg");
+            errEl.textContent = "";
+
+            const email = document.getElementById("email").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const profile_name = document.getElementById("profile_name").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!email || !username || !profile_name || !password) {
+                errEl.textContent = "Заполните все поля";
+                return;
+            }
+            if (username.length < 3){ errEl.textContent ="Username минимум 3 символа";return;}
+            if (profile_name.length < 3) {errEl.textContent ="Имя профиля минимум 3 символа";return; }
+            if (password.length < 8) {errEl.textContent = "Пароль минимум 8 символов";return;}
+
+            try {
+                const res =await fetch(`${API_BASE}/register/step1`,{
+                    method:"POST",
+                    headers:{ "Content-Type": "application/json" },
+                    body:JSON.stringify({email,username, profile_name,password,role: "client" })
+                });
+                const data =await res.json();
+                if (!res.ok) {
+                    const detail = Array.isArray(data.detail)
+                        ? data.detail.map(e => e.msg).join(", ")
+                        : (data.detail || "Ошибка регистрации");
+                    throw new Error(detail);
+                }
+
+                document.getElementById("registerForm").style.display = "none";
+                document.getElementById("successScreen").style.display = "flex";
+            } catch (err){
+                errEl.textContent=err.message;
+            }
+        });
+    </script>
+</body>
+</html>
