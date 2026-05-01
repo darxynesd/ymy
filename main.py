@@ -8,6 +8,7 @@ import json
 from fastapi.middleware.cors import CORSMiddleware
 from models import User, UserRole, Master, Profession
 from auth import create_access_token, get_current_user
+
 app = FastAPI(title="YMY")
 
 app.add_middleware(
@@ -31,29 +32,55 @@ def get_db():
 def root():
     return {"message": "YMY. /docs"}
 
-@app.post("/register/step1")
-def registor_step1(data: UserRegisterStep1,db: Session=Depends(get_db)):
+    #------------>Отсюда старт регистрации
+
+@app.post("/register/step2")
+def registor_step2(data: UserRegisterStep2,db: Session=Depends(get_db)):
     
     if db.query(User).filter(User.email== data.email).first():
         raise HTTPException(400, "Email уже зарегистрирован")
 
-    if db.query(User).filter(User.username==data.username).first():
-        raise HTTPException(400, "Username занят")
+    if data.password != data.confirm_password:
+        raise HTTPException(400,"Пароли не совпадают")
 
-    new_user=User(email=data.email,
-    username=data.username,
-    password=data.password,
-    role=data.role,
-    profile_name=data.profile_name,
-    profile_photo=data.profile_photo
+    if db.query(User).filter(User.username==data.username).first():
+        raise HTTPException(400,"Username занят")
+
+    user=User(email=data.email,
+        username=data.username,
+        password=data.password,
+        role=data.role,
+        profile_name=data.profile_name,
+        profile_photo=data.profile_photo
     )
 
-    db.add(new_user)
+    db.add(user)
     db.commit()
-    db.refresh(new_user)
+    db.refresh(user)
     
+    return {
+        "message": "Шаг 2 завершён",
+        "user_id": user.id,
+        "role": user.role.value
+    }
 
-    if data.role ==UserRole.client:
+@app.post("/register/step3")
+def register_step3(data: UserRegisterStep3, db: Session =Depends(get_db)):
+
+    user= db.query(User).filter(User.id== data.user_id).first()
+    if not user:
+        raise HTTPException(404, "User not found")
+    if user.nickname:
+        raise HTTPException(404, "Profield's been filed")
+
+    user.nickname=  data.nickname
+    user.avatar= data.avatar
+    user.banner= data.banner
+
+    dt.commit()
+    db.refresh()
+
+    if user.role ==UserRole.client:
         return{
             "message":"done",
             "user_id": new_user.id,
@@ -61,13 +88,13 @@ def registor_step1(data: UserRegisterStep1,db: Session=Depends(get_db)):
         }
     else:
         return {
-            "message": "Шаг 1 завершён. Продолжите регистрацию мастера.",
-            "user_id": new_user.id,
-            "role": new_user.role.value,  
-            "next_step": "/register/step2"
+            "message": "Шаг 3 завершён. Продолжите регистрацию мастера.",
+            "user_id": user.id,
+            "role":user.role.value,  
+            "next_step": "/register/step4"
         }
 
-@app.post("/register/step2")
+@app.post("/register/step4")
 def registor_step2(data: UserRegisterStep2, db: Session= Depends(get_db)):
     user=db.query(User).filter(User.id==data.user_id).first()
     if not user:
@@ -77,18 +104,29 @@ def registor_step2(data: UserRegisterStep2, db: Session= Depends(get_db)):
     if user.master_profile:
         raise HTTPException(400, "Профиль мастера уже создан")    
 
-
-
-
     professions = db.query(Profession).filter(
         Profession.id.in_(data.profession_ids)
     ).all()
-    if len(professions) != len(data.profession_ids):
+    if len(professions) !=len(data.profession_ids):
         raise HTTPException(400, "Некоторые профессии не найдены")
     
-   
-    social_links_json =json.dumps(data.social_links) if data.social_links else None
+    tags=[]
+    for tag_name in data.tags:
+        tag_name=tag_name.lower().strip().lstrip("#")
+        if not tag_name:
+            continue
+
+        tag= db,query(Tag).filter(tag.name== tag_name).first()
+        if not tag:
+            tag= Tag(name=tag_name)
+            db.add(tag)
+            db.flush()
+        tags.append(tag)
+
+
     
+    social_links_json =json.dumps(data.social_links) if data.social_links else None
+
     
     master = Master(
         user_id=data.user_id,
@@ -97,6 +135,7 @@ def registor_step2(data: UserRegisterStep2, db: Session= Depends(get_db)):
         social_links=social_links_json
     )
     master.professions=professions
+    master.tags=tags
     
     db.add(master)
     db.commit()
@@ -105,33 +144,15 @@ def registor_step2(data: UserRegisterStep2, db: Session= Depends(get_db)):
     return {
         "message":"Регистрация мастера завершена!",
         "master_id": master.id,
-        "professions":[p.name for p in professions]
+        "professions": [p.name for p in professions],
+        "tags": [t.name for t in tags]
     }
-
-
-@app.post("/professions",response_model=ProfessionResponse)
-def create_profession(data:ProfessionCreate, db:Session = Depends(get_db)):
-    existing =db.query(Profession).filter(Profession.name ==data.name).first()
-    if existing:
-        raise HTTPException(400, "Такая профессия уже есть")
-    
-    prof =Profession(name=data.name)
-    db.add(prof)
-    db.commit()
-    db.refresh(prof)
-    return prof
-    
-@app.get("/professions/",response_model= list[ProfessionResponse])
-def get_professions(db:Session =Depends(get_db)):
-    return db.query(Profession).all()
-
-
-
 
 
 @app.post("/login")
 def login(data: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter((User.email == data.login) |  (User.username == data.login)).first()
+    user = db.query(User).filter(
+        (User.email == data.login) |  (User.username == data.login)).first()
     
     if not user or not user.verify_password(data.password):
         raise HTTPException(401, "Неверный логин или пароль")
@@ -143,12 +164,11 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "user_id":user.id,
         "role" : user.role.value,
-        "profile_name":user.profile_name
+        "profile_name":user.nickname
     }
     
     if user.role == UserRole.master and user.master_profile:
         response["master_id"] =user.master_profile.id
-        response["address"]= user.master_profile.address
     
     return response
 
@@ -157,14 +177,19 @@ def get_user_profile(user_id:int,db:Session =Depends(get_db), current_user: User
     user =db.query(User).filter(User.id==user_id).first()
     if current_user.id != user_id:
         raise HTTPException(403, "No access")
-    
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(404, "Пользователь не найден")
+
     result ={
         "id": user.id,
         "email":user.email,
         "username":user.username,
-        "role":user.role.value,
-        "profile_name": user.profile_name,
-        "profile_photo": user.profile_photo
+        "role": user.role.value,
+        "nickname": user.nickname,
+        "avatar": user.avatar,
+        "banner": user.banner
     }
     
 
@@ -175,7 +200,27 @@ def get_user_profile(user_id:int,db:Session =Depends(get_db), current_user: User
             "address": master.address,
             "social_links":json.loads(master.social_links) if master.social_links else None,
             "rating":master.rating,
-            "professions":[p.name for p in master.professions]
+            "professions": [p.name for p in master.professions],
+            "tags": [t.name for t in master.tags]
         }
     
     return result
+
+@app.post("/professions", response_model=ProfessionResponse)
+
+def create_profession(data: ProfessionCreate, db: Session= Depends(get_db)):
+    if db.query(Profession).filter(Profession.name== data.name).first():
+        raise HTTPException(400, "Profession exist")
+        prof= Profession(name=data.name)
+        db.add(prof)
+        db.commit()
+        db.refresh(prof)
+        return prof
+
+@app.get("/professions/",response_model=list[ProfessionResponse])
+def get_professions(db:Session= Depends(get_db)):
+    return db.query(Profession).all()
+
+@app.get("/tags/", response_model=list[TagResponse])
+def get_tags(db: Session = Depends(get_db)):
+    return db.query(Tag).all()
