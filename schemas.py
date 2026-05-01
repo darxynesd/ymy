@@ -2,21 +2,27 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import List,Optional, Dict
 from models import UserRole
 
-class UserRegisterStep1(BaseModel):
+class UserRegisterStep2(BaseModel):
     email: EmailStr
     username:str=Field(...,min_length=3,max_length=50)
     password: str= Field(...,min_length=8)
     role: UserRole
-    profile_name: str= Field(..., min_length=3, max_length=50)
-    profile_photo: Optional[str]=None#конченый бред .надо переделать
 
-class UserRegisterStep2(BaseModel):
+
+
+class UserRegisterStep3(BaseModel):
     user_id:int
-    phone  :str
-    address:str
-    social_links:dict
+    nickname: str = Field(...,min_length=3, max_length=50)
+    avatar: Optional[str] = None#todo:заменить на загрузку файла
+    banner: Optional[str] = None#todo:заменить на загрузк файла
+
+class UserRegisterStep4(BaseModel):
+    user_id: int
+    phone: str
     profession_ids: List[int]
-    profile_photo:Optional[str]
+    tags: List[str]
+    address: Optional[str] = None
+    social_links: Optional[dict] = None
 
 class ProfessionCreate(BaseModel):
     name: str
@@ -28,26 +34,14 @@ class ProfessionResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class userResponse(BaseModel):
+class TagResponse(BaseModel):
     id: int
-    email: str
-    username: str
-    role: UserRole
-    social_links: Optional[str]
-    rating:int
-    profassions: List[ProfessionResponse]
-
+    name: str
+ 
     class Config:
-        from_attributes=True 
-
+        from_attributes = True
+ 
+ 
 class LoginRequest(BaseModel):
-    login:str
-    password:str
-
-class LoginResponse(BaseModel):
-    message:str
-    user_id:int
-    role: UserRole
-    profile_name:str
-    master_id:Optional[int] =None 
-    address: Optional[str]=None
+    login: str
+    password: str
