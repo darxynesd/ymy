@@ -11,11 +11,21 @@ class UserRole(str, enum.Enum):
     client= "client"
     master="master"
 
-
-master_professions =Table("master_master_professions",Base.metadata,
-Column("master_id",Integer,ForeignKey("masters.id")),
-Column("profession_id",Integer, ForeignKey("professions.id"))
+master_professions =Table(
+    "master_master_professions",
+    Base.metadata,
+    Column("master_id",Integer,ForeignKey("masters.id")),
+    Column("profession_id",Integer, ForeignKey("professions.id"))
     )
+
+master_tags= Table(
+    "master_tags",
+    Base.metadata,
+    Column("master_id", Integer, ForeignKey("masters.id")),
+    Column("tag_id", Integer, ForeignKey("tags.id"))
+    )
+
+
 
 class User(Base):
     __tablename__ = "users"
@@ -25,19 +35,18 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(SQLEnum(UserRole), nullable=False, default=UserRole.client)
-    profile_name = Column(String, nullable=False)
-    profile_photo = Column(String, nullable=True)
+
+    nickname= Column(String, nullable=True)
+    avatar= Column(String, nullable=True)
+    banner=Column(String, nullable=True)
 
     master_profile = relationship("Master", back_populates="user", uselist=False)
-
-
-    def __init__(self, email, username, password, role, profile_name, profile_photo=None):
+    def __init__(self, email,username,password,role):
         self.email = email.lower().strip()
-        self.username = username
-        self.hashed_password = pwd_context.hash(password)
-        self.role = role
-        self.profile_name = profile_name
-        self.profile_photo = profile_photo 
+        self.username= username
+        self.hashed_password= pwd_context.hash(password)
+        self.role=role
+
 
     def verify_password(self, plain_password:str) -> bool:
         return pwd_context.verify(plain_password, self.hashed_password)
@@ -59,6 +68,7 @@ class Master(Base):
 
     user= relationship("User", back_populates="master_profile")
     professions= relationship("Profession", secondary=master_professions,back_populates="masters")
+    tags = relationship("Tag", secondary=master_tags, back_populates="masters")
 
 
 class Profession(Base):
@@ -67,3 +77,22 @@ class Profession(Base):
     name=Column(String, unique=True,nullable=False)
 
     masters= relationship("Master", secondary=master_professions, back_populates="professions")
+
+
+class Profession(Base):
+    __tablename__="professions"
+
+    id= Column(Integer,primary_key=True,index=True)
+    name =Column(String, unique=True, nullable=False)
+
+    masters= relationship("Master", secondary=master_professions, back_populates="professions")
+
+
+class Tag(Base):
+    __tablename__ ="tage"
+
+    id =Column(Integer, primary_key=True,index=True)
+    name= Column(String,unique=True,nullable=False)
+
+    masters =relationship("Master",secondary=master_tags,back_populates="tags")
+
