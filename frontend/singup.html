@@ -4,113 +4,328 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YMY — Регистрация</title>
-    <link rel="stylesheet" href ="style.css">
-    <link rel= "stylesheet" href="singup.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
 </head>
+
 <body>
     <main>
         <header>
-            <a href ="index.html"><img src="images/5.png" alt="YMY Logo"></a>
-            <div class ="auth-buttons">
+            <a href="index.html"><img src="images/5.png" alt="YMY Logo"></a>
+            <div class="auth-buttons">
                 <a href="login.html" class="my-button">Войти</a>
             </div>
         </header>
 
-        <section class ="signup-hero">
-            <h1 class="signup-title">JOIN<br>YMY</h1>
+        <section class="auth-hero">
+            <h1 class="auth-title">JOIN<br>YMY</h1>
         </section>
 
-        <section class="signup-wrapper">
+        <section class="auth-wrapper">
 
-            <form id="registerForm" class="signup-form">
-                <div class="form-label-big"></div>
+            <!-- ИНДИКАТОР ШАГОВ -->
+            <div class="steps-indicator" id="stepsIndicator">
+                <div class="step-dot active" id="dot1">01</div>
+                <div class="step-line"></div>
+                <div class="step-dot" id="dot2">02</div>
+                <div class="step-line"></div>
+                <div class="step-dot" id="dot3">03</div>
+                <div class="step-line master-step" id="line4" style="display:none"></div>
+                <div class="step-dot master-step" id="dot4" style="display:none">04</div>
+            </div>
 
-                <div class= "field-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="your@email.com" required>
+            <!-- ШАГ 1: Роль -->
+            <div id="step1" class="auth-form">
+                <div class="form-label-big">Я —</div>
+                <div class="role-choice">
+                    <button type="button" class="role-card" id="roleClient" onclick="selectRole('client')">
+                        <span class="role-card-title">Клиент</span>
+                        <span class="role-card-desc">Ищу мастера</span>
+                    </button>
+                    <button type="button" class="role-card" id="roleMaster" onclick="selectRole('master')">
+                        <span class="role-card-title">Мастер</span>
+                        <span class="role-card-desc">Предлагаю услуги</span>
+                    </button>
                 </div>
-
-
-                <div class="field-group">
-                    <label for ="username">Username</label>
-                    <input type="text" id="username" placeholder="минимум 3 символа" minlength="3" maxlength="50" required>
-                </div>
-                
-
-
-                <div class="field-group">
-                    <label for="profile_name">Имя профиля</label>
-                    <input type="text" id="profile_name" placeholder="Как вас зовут?" minlength="3" maxlength="50" required>
-                </div>
-
-
-                <div class= "field-group">
-                    <label for= "password">Пароль</label>
-                    <input type="password" id="password" placeholder="минимум 8 символов" minlength="8" required>
-                </div>
-
-
-                <div class="error-msg" id="errorMsg"></div>
-
-                <button type="button" class="submit-btn" id="submitBtn">
-                    <span>Зарегистрироваться</span>
-                    <span class="arrow">&#8594;</span>
+                <div class="error-msg" id="step1Error"></div>
+                <button type="button" class="submit-btn" onclick="goStep2()">
+                    <span>Продолжить</span><span class="arrow">&#8594;</span>
                 </button>
-            </form>
+            </div>
 
-            <div id="successScreen"class="success-screen" style="display:none">
+            <!-- ШАГ 2: Email, username, пароль -->
+            <div id="step2" class="auth-form" style="display:none">
+                <div class="form-label-big">Шаг 02</div>
+                <div class="field-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+                <div class="field-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="минимум 3 символа">
+                </div>
+                <div class="field-group">
+                    <label>Пароль</label>
+                    <input type="password" id="password" placeholder="минимум 8 символов">
+                </div>
+                <div class="field-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="confirmPassword" placeholder="повторите пароль">
+                </div>
+                <div class="error-msg" id="step2Error"></div>
+                <div class="form-nav">
+                    <button type="button" class="back-btn" onclick="goTo(1)">&#8592; Назад</button>
+                    <button type="button" class="submit-btn" onclick="submitStep2()">
+                        <span>Продолжить</span><span class="arrow">&#8594;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШАГ 3: Nickname, avatar, banner -->
+            <div id="step3" class="auth-form" style="display:none">
+                <div class="form-label-big">Шаг 03</div>
+                <div class="field-group">
+                    <label>Никнейм</label>
+                    <input type="text" id="nickname" placeholder="минимум 3 символа">
+                </div>
+                <div class="field-group">
+                    <label>Аватар <span class="field-note">(URL, загрузка — скоро)</span></label>
+                    <input type="text" id="avatar" placeholder="https://...">
+                </div>
+                <div class="field-group">
+                    <label>Баннер <span class="field-note">(URL, загрузка — скоро)</span></label>
+                    <input type="text" id="banner" placeholder="https://...">
+                </div>
+                <div class="error-msg" id="step3Error"></div>
+                <div class="form-nav">
+                    <button type="button" class="back-btn" onclick="goTo(2)">&#8592; Назад</button>
+                    <button type="button" class="submit-btn" onclick="submitStep3()">
+                        <span>Продолжить</span><span class="arrow">&#8594;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШАГ 4: Мастер — телефон, профессии, теги -->
+            <div id="step4" class="auth-form" style="display:none">
+                <div class="form-label-big">Шаг 04</div>
+                <div class="field-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="phone" placeholder="+380XXXXXXXXX">
+                </div>
+                <div class="field-group">
+                    <label>Профессии</label>
+                    <div class="tags-list" id="professionsList"><span class="loading-text">Загрузка...</span></div>
+                </div>
+                <div class="field-group">
+                    <label>Теги <span class="field-note">(через запятую: маникюр, наращивание)</span></label>
+                    <input type="text" id="tagsInput" placeholder="маникюр, наращивание, педикюр">
+                </div>
+                <div class="error-msg" id="step4Error"></div>
+                <div class="form-nav">
+                    <button type="button" class="back-btn" onclick="goTo(3)">&#8592; Назад</button>
+                    <button type="button" class="submit-btn" onclick="submitStep4()">
+                        <span>Готово</span><span class="arrow">&#8594;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- УСПЕХ -->
+            <div id="successScreen" class="success-screen" style="display:none">
                 <div class="success-icon">✓</div>
                 <div class="form-label-big">Готово!</div>
                 <p class="success-text">Добро пожаловать в YMY</p>
                 <a href="login.html" class="submit-btn" style="text-decoration:none;">
-                    <span>Войти</span>
-                    <span class="arrow">&#8594;</span>
+                    <span>Войти</span><span class="arrow">&#8594;</span>
                 </a>
             </div>
+
+            <!-- ССЫЛКА ВНИЗУ -->
+            <p class="auth-switch" id="authSwitch">Уже есть аккаунт? <a href="login.html">Войти</a></p>
 
         </section>
     </main>
 
     <script>
-        const API_BASE ="http://localhost:8000";
+        const API_BASE = "http://localhost:8000";
+        let selectedRole = null;
+        let userId = null;
+        let selectedProfessions = new Set();
+        let currentStep = 1;
 
-        document.getElementById("submitBtn").addEventListener("click", async () => {
-            const errEl = document.getElementById("errorMsg");
-            errEl.textContent = "";
+        function selectRole(role) {
+            selectedRole = role;
+            document.getElementById("roleClient").classList.toggle("active", role === "client");
+            document.getElementById("roleMaster").classList.toggle("active", role === "master");
 
-            const email = document.getElementById("email").value.trim();
-            const username = document.getElementById("username").value.trim();
-            const profile_name = document.getElementById("profile_name").value.trim();
-            const password = document.getElementById("password").value;
+            // показываем шаг 04 в индикаторе если мастер
+            const masterSteps = document.querySelectorAll(".master-step");
+            masterSteps.forEach(el => el.style.display = role === "master" ? "" : "none");
+        }
 
-            if (!email || !username || !profile_name || !password) {
-                errEl.textContent = "Заполните все поля";
+        function goTo(n) {
+            console.log("goTo called with n:", n);
+            document.querySelectorAll(".auth-form, .success-screen").forEach(el => el.style.display = "none");
+            const el = document.getElementById("step" + n) || document.getElementById("successScreen");
+            if (el) el.style.display = "flex";
+            currentStep = n;
+            updateDots(n);
+
+            const switchEl = document.getElementById("authSwitch");
+            if (switchEl) switchEl.style.display = n === 5 ? "none" : "";
+        }
+
+        function updateDots(n) {
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById("dot" + i);
+                if (!dot) continue;
+                dot.className = "step-dot";
+                if (i < n) dot.classList.add("done");
+                else if (i === n) dot.classList.add("active");
+            }
+        }
+
+        function goStep2() {
+            if (!selectedRole) {
+                document.getElementById("step1Error").textContent = "Выберите роль";
                 return;
             }
-            if (username.length < 3){ errEl.textContent ="Username минимум 3 символа";return;}
-            if (profile_name.length < 3) {errEl.textContent ="Имя профиля минимум 3 символа";return; }
-            if (password.length < 8) {errEl.textContent = "Пароль минимум 8 символов";return;}
+            goTo(2);
+        }
+
+        async function submitStep2() {
+            console.log("submitStep2 called, role:", selectedRole, "userId before:", userId);
+            const errEl = document.getElementById("step2Error");
+            errEl.textContent = "";
+ 
+            const email = document.getElementById("email").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const confirm = document.getElementById("confirmPassword").value;
+
+            if (!email || !username || !password || !confirm) { errEl.textContent = "Заполните все поля"; return; }
+            if (username.length < 3) { errEl.textContent = "Username минимум 3 символа"; return; }
+            if (password.length < 8) { errEl.textContent = "Пароль минимум 8 символов"; return; }
+            if (password !== confirm) { errEl.textContent = "Пароли не совпадают"; return; }
 
             try {
-                const res =await fetch(`${API_BASE}/register/step1`,{
-                    method:"POST",
-                    headers:{ "Content-Type": "application/json" },
-                    body:JSON.stringify({email,username, profile_name,password,role: "client" })
+                const res = await fetch(`${API_BASE}/register/step2`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, username, password, confirm_password: confirm, role: selectedRole })
                 });
-                const data =await res.json();
+                const data = await res.json();
                 if (!res.ok) {
-                    const detail = Array.isArray(data.detail)
-                        ? data.detail.map(e => e.msg).join(", ")
-                        : (data.detail || "Ошибка регистрации");
+                    const detail = Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(", ") : (data.detail || "Ошибка");
+                    throw new Error(detail);
+                }
+                userId = data.user_id;
+                goTo(3);
+            } catch (err) {
+                errEl.textContent = err.message;
+            }
+        }
+
+        async function submitStep3() {
+            const errEl = document.getElementById("step3Error");
+            errEl.textContent = "";
+
+            const nickname = document.getElementById("nickname").value.trim();
+            const avatar = document.getElementById("avatar").value.trim();
+            const banner = document.getElementById("banner").value.trim();
+
+            if (!nickname) { errEl.textContent = "Введите никнейм"; return; }
+            if (nickname.length < 3) { errEl.textContent = "Никнейм минимум 3 символа"; return; }
+
+            try {
+                const res = await fetch(`${API_BASE}/register/step3`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: userId, nickname, avatar: avatar || null, banner: banner || null })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    const detail = Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(", ") : (data.detail || "Ошибка");
                     throw new Error(detail);
                 }
 
-                document.getElementById("registerForm").style.display = "none";
-                document.getElementById("successScreen").style.display = "flex";
-            } catch (err){
-                errEl.textContent=err.message;
+                if (selectedRole === "master") {
+                    loadProfessions();
+                    goTo(4);
+                } else {
+                    showSuccess();
+                }
+            } catch (err) {
+                errEl.textContent = err.message;
             }
-        });
+        }
+
+        async function submitStep4() {
+            const errEl = document.getElementById("step4Error");
+            errEl.textContent = "";
+
+            const phone = document.getElementById("phone").value.trim();
+            const tagsRaw = document.getElementById("tagsInput").value.trim();
+
+            if (!phone) { errEl.textContent = "Введите телефон"; return; }
+            if (selectedProfessions.size === 0) { errEl.textContent = "Выберите хотя бы одну профессию"; return; }
+
+            const tags = tagsRaw ? tagsRaw.split(",").map(t => t.trim()).filter(Boolean) : [];
+
+            try {
+                const res = await fetch(`${API_BASE}/register/step4`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: userId, phone, profession_ids: [...selectedProfessions], tags })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    const detail = Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(", ") : (data.detail || "Ошибка");
+                    throw new Error(detail);
+                }
+                showSuccess();
+            } catch (err) {
+                errEl.textContent = err.message;
+            }
+        }
+
+        function showSuccess() {
+            document.querySelectorAll(".auth-form").forEach(el => el.style.display = "none");
+            document.getElementById("successScreen").style.display = "flex";
+            document.getElementById("authSwitch").style.display = "none";
+            updateDots(99);
+        }
+
+        async function loadProfessions() {
+            const container = document.getElementById("professionsList");
+            container.innerHTML = '<span class="loading-text">Загрузка...</span>';
+            try {
+                const res = await fetch(`${API_BASE}/professions/`);
+                const profs = await res.json();
+                container.innerHTML = "";
+                if (profs.length === 0) {
+                    container.innerHTML = '<span class="loading-text">Нет профессий</span>';
+                    return;
+                }
+                profs.forEach(p => {
+                    const tag = document.createElement("button");
+                    tag.type = "button";
+                    tag.className = "tag-pill";
+                    tag.textContent = p.name;
+                    tag.addEventListener("click", () => {
+                        if (selectedProfessions.has(p.id)) {
+                            selectedProfessions.delete(p.id);
+                            tag.classList.remove("selected");
+                        } else {
+                            selectedProfessions.add(p.id);
+                            tag.classList.add("selected");
+                        }
+                    });
+                    container.appendChild(tag);
+                });
+            } catch {
+                container.innerHTML = '<span class="loading-text">Не удалось загрузить</span>';
+            }
+        }
     </script>
 </body>
 </html>

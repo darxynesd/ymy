@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YMY — Войти</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <main>
+        <header>
+            <a href="index.html"><img src="images/5.png" alt="YMY Logo"></a>
+            <div class="auth-buttons">
+                <a href="singup.html" class="my-button">Зарегистрироваться</a>
+            </div>
+        </header>
+
+        <section class="auth-hero">
+            <h1 class="auth-title">WELCOME<br>BACK</h1>
+        </section>
+
+        <section class="auth-wrapper">
+
+            <div id="loginForm" class="auth-form">
+                <div class="form-label-big">Войти</div>
+
+                <div class="field-group">
+                    <label>Email или Username</label>
+                    <input type="text" id="login" placeholder="your@email.com или username">
+                </div>
+
+                <div class="field-group">
+                    <label>Пароль</label>
+                    <input type="password" id="password" placeholder="ваш пароль">
+                </div>
+
+                <div class="error-msg" id="loginError"></div>
+
+                <button type="button" class="submit-btn" id="loginBtn">
+                    <span>Войти</span><span class="arrow">&#8594;</span>
+                </button>
+            </div>
+
+            <p class="auth-switch">Нет аккаунта? <a href="singup.html">Зарегистрироваться</a></p>
+
+        </section>
+    </main>
+
+    <script>
+        const API_BASE = "http://localhost:8000";
+
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const errEl = document.getElementById("loginError");
+            errEl.textContent = "";
+
+            const login = document.getElementById("login").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!login || !password) { errEl.textContent = "Заполните все поля"; return; }
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login, password })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    const detail = Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(", ") : (data.detail || "Ошибка");
+                    throw new Error(detail);
+                }
+
+                localStorage.setItem("token", data.access_token);
+                localStorage.setItem("user_id", data.user_id);
+                localStorage.setItem("role", data.role);
+                localStorage.setItem("nickname", data.nickname || "");
+
+                window.location.href = "lenta.html";
+            } catch (err) {
+                errEl.textContent = err.message;
+            }
+        });
+    </script>
+</body>
+</html>
