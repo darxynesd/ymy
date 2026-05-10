@@ -1,95 +1,78 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Профиль мастера</title>
-    <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="___________">
 </head>
-
 <body>
+
+
     <nav>
-    <div id="nav-left">
-        <img src="" alt="аватарка" id="avatar">
-        <a href="#main">Главная</a>
-        <a href="#works">Работы</a>
-        <a href="#reviews">Отзывы</a>
-        <a href="#location">Локация</a>
+        <div class="nav-top-left">
+            <div class="avatar-circle"></div>
+            <div class="nav-links-pill">
+                <a href="#main">Главная</a>
+                <a href="#works">Работы</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#location">Локация</a>
+            </div>
+        </div>
+
+
+        <div class="nav-top-right">
+            <div class="phone-pill">
+                <span>+38098945334</span>
+                <p>Номер телефона</p>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="banner-area">
+        <div class="banner-left"></div>
+        <div class="banner-right">
+            <p class="profession-small">профессия</p>
+            <h1 class="master-name">ИМЯ МАСТЕРА</h1>
+            <button class="write-btn">Написать</button>
+        </div>
     </div>
     
-    <div id="nav-right">
-        <span id="phone">+380123456789</span>
-        <p>номер для записи</p>
-    </div>
-</nav>
-    
-    <div id="nav-right">
-        <span id="phone">+380123456789</span>
-        <p>номер для записи</p>
-    </div>
-</nav>
 
-    <div id="banner">
-        <h1 id="master-name">Имя мастера</h1>
-        <p id="master-profession">Профессия</p>
-        <button id="action-btn">Написать</button>
-    </div>
-    
-    <div id="works">
-        <h2>Работы</h2>
-
-    </div>
+    <div class="below-banner">
+        <div class="below-left">
+            <div class="about-card">
+                <h2>О мастере</h2>
+                <p class="about-text">описание мастера</p>
+                <div class="tags">
+                    <span class="tag">#креативний</span>
+                    <span class="tag">#маникюр</span>
+                </div>
+            </div>
 
 
-     <div id="reviews">
-        <h2>Отзывы</h2>
-    </div>
+            <div class="view-toggle">
+                <button class="toggle-btn">Окошки</button>
+            </div>
+        </div>
 
-    <div id="about">
-        <h2>О мастере</h2>
-        <p id="about-text">Описание мастера...</p>
-    </div>
 
-    <!-- ТЕГИ МАСТЕРА -->
-    <div id="tags">
-        <span class="tag">#маникюр</span>
-        <span class="tag">#наращивание</span>
-        <span class="tag">#креативный мастер</span>
-    </div>
-
-    <!-- О МАСТЕРЕ -->
-    <div id="about">
-        <h2>О мастере</h2>
-        <p id="about-text">Описание мастера...</p>
-    </div>
-
-    <!-- 3 ЗАКРЕПЛЁННЫЕ РАБОТЫ -->
-    <div id="works">
-        <h2>Работы</h2>
-        <div id="works-grid">
-            <div class="work-card">фото 1</div>
-            <div class="work-card">фото 2</div>
-            <div class="work-card">фото 3</div>
+        <div class="works-section">
+            <div class="work-card">
+                <div class="work-img-placeholder"></div>
+            </div>
+            <div class="work-card">
+                <div class="work-img-placeholder"></div>
+            </div>
+            <div class="work-card">
+                <div class="work-img-placeholder"></div>
+            </div>
         </div>
     </div>
 
-    <!-- ОТЗЫВЫ — скрыты по умолчанию -->
-    <div id="reviews" style="display:none">
-        <h2>Отзывы</h2>
-    </div>
 
-    <!-- ЛОКАЦИЯ -->
-    <div id="location">
-        <h2>Локация</h2>
-        <p id="address-text">Адрес мастера...</p>
-    </div>
-
-    <script src="script.js"></script>
-
-
-
-
+<script src="script.js"></script>
 </body>
 </html>

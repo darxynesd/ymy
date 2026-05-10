@@ -1,0 +1,278 @@
+/* auth.css — общие стили для signup.html и login.html */
+
+.auth-hero {
+    padding: 60px 0 0;
+    overflow: hidden;
+}
+.auth-title {
+    font-family: "Odibee Sans", sans-serif;
+    font-size: clamp(5em, 18vw, 17em);
+    font-weight: 400;
+    line-height: 0.88;
+    color: #2E373A;
+    margin: 0;
+    user-select: none;
+}
+
+.auth-wrapper {
+    margin: 60px auto 80px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+
+.steps-indicator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.step-dot {
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 1.1em;
+    color: #2E373A44;
+    transition: color 0.3s, transform 0.3s;
+    letter-spacing: 0.05em;
+}
+.step-dot.active {
+    color: #2E373A;
+    transform: scale(1.15);
+}
+.step-dot.done {
+    color: #2E373A;
+    opacity: 0.35;
+    text-decoration: line-through;
+}
+.step-line {
+    flex: 1;
+    height: 1px;
+    background: #2E373A33;
+}
+
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    animation: formAppear 0.35s ease both;
+}
+@keyframes formAppear {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-label-big {
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 2.4em;
+    letter-spacing: 0.04em;
+    color: #2E373A;
+    line-height: 1;
+    border-bottom: 1px solid #2E373A22;
+    padding-bottom: 18px;
+}
+
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.field-group label {
+    font-size: 0.75em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+.field-note {
+    font-size: 0.85em;
+    opacity: 0.5;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.field-group input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid #2E373A55;
+    padding: 10px 0;
+    font-size: 1.1em;
+    font-family: "Libre Baskerville", sans-serif;
+    color: #2E373A;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+
+}
+.field-group input::placeholder {
+    opacity: 0.28;
+    font-style: italic;
+}
+.field-group input:focus {
+    border-bottom-color: #2E373A;
+}
+
+
+.role-choice {
+    display: flex;
+    gap: 16px;
+}
+.role-card {
+    flex: 1;
+    background: transparent;
+    border: 1.5px solid #2E373A44;
+    border-radius: 6px;
+    padding: 24px 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: left;
+}
+.role-card:hover {
+    border-color: #2E373A99;
+}
+.role-card.active {
+    background: #2E373A;
+    border-color: #2E373A;
+}
+.role-card.active .role-card-title,
+.role-card.active .role-card-desc {
+    color: #CBCBCB;
+}
+.role-card-title {
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 1.6em;
+    color: #2E373A;
+    letter-spacing: 0.05em;
+}
+.role-card-desc {
+    font-family: "Libre Baskerville", sans-serif;
+    font-size: 0.85em;
+    color: #2E373A;
+    opacity: 0.55;
+    font-style: italic;
+}
+
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+.tag-pill {
+    background: transparent;
+    border: 1.5px solid #2E373A44;
+    border-radius: 100px;
+    padding: 7px 18px;
+    font-family: "Libre Baskerville", sans-serif;
+    font-size: 0.88em;
+    color: #2E373A;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tag-pill:hover { border-color: #2E373A; }
+.tag-pill.selected {
+    background: #2E373A;
+    color: #CBCBCB;
+    border-color: #2E373A;
+}
+.loading-text {
+    font-style: italic;
+    opacity: 0.4;
+    font-size: 0.9em;
+}
+
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #272e35;
+    color: #CBCBCB;
+    border: none;
+    padding: 14px 32px;
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 1.3em;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 4px;
+    align-self: flex-start;
+    transition: background 0.3s, gap 0.3s;
+    text-decoration: none;
+}
+.submit-btn:hover { background: #4a5568; gap: 20px; }
+
+.form-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.back-btn {
+    background: transparent;
+    border: none;
+    font-family: "Libre Baskerville", sans-serif;
+    font-size: 0.95em;
+    color: #2E373A;
+    opacity: 0.45;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    padding: 0;
+}
+.back-btn:hover { opacity: 1; }
+
+
+.error-msg {
+    font-size: 0.85em;
+    color: #c0392b;
+    font-style: italic;
+    min-height: 1.2em;
+}
+
+
+.auth-switch {
+    font-size: 0.9em;
+    opacity: 0.55;
+    text-align: center;
+    font-style: italic;
+}
+.auth-switch a {
+    color: #2E373A;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+
+.success-screen {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 60px 0;
+    text-align: center;
+    animation: formAppear 0.4s ease both;
+}
+.success-icon {
+    font-size: 4em;
+    font-family: "Odibee Sans", sans-serif;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+.success-text {
+    font-size: 1.2em;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+
+@media (max-width: 767px) {
+    .auth-title { font-size: clamp(4em, 22vw, 7em); }
+    .auth-wrapper { margin: 40px auto 60px; padding: 0 4px; }
+    .role-choice { flex-direction: column; }
+    .submit-btn { width: 100%; justify-content: center; }
+    .form-nav { flex-direction: column-reverse; gap: 16px; align-items: stretch; }
+    .back-btn { text-align: center; }
+}
